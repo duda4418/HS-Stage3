@@ -13,6 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Logs } from "./Logs";
 
 export default function Page() {
   return (
@@ -25,18 +26,18 @@ export default function Page() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
-                  Raspberry Pi
-                </BreadcrumbLink>
+                <BreadcrumbLink href="#">Task 1</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>CPU</BreadcrumbPage>
+                <BreadcrumbPage>Logs</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4"></div>
+        <div className="m-10">
+          <Logs />
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

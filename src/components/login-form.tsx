@@ -35,7 +35,7 @@ export function LoginForm({
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required />
             </div>
-            <Link href="/controls">
+            <Link href="/cpu">
               <Button type="submit" className="w-full">
                 Login
               </Button>
