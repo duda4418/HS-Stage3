@@ -1,28 +1,69 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState, useRef } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 
 export function Logs() {
-  const logs = [
-    "2025-03-19 09:30:00 INFO: Application starting...",
-    "2025-03-19 09:30:02 INFO: Database connected.",
-    "2025-03-19 09:30:05 WARN: Deprecated API usage detected.",
-    "2025-03-19 09:30:10 ERROR: Failed to load configuration file.",
-    "2025-03-19 09:30:15 INFO: Application running.",
-  ];
+  const [logs, setLogs] = useState<string[]>([]);
+  const logContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const response = await fetch(
+          "http://192.168.194.156:5000/api/get_logs"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch logs");
+        }
+
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          const formattedLogs = data.map((log) => {
+            const timestamp = new Date(log.date_logged).toLocaleString();
+            const message = log.message;
+            const tag = log.component_data?.id || "Unknown Tag";
+            const username =
+              log.component_data?.data?.username || "Unknown User";
+
+            return `${timestamp} | ${message} | Tag: ${tag} | User: ${username}`;
+          });
+
+          setLogs(formattedLogs);
+        }
+      } catch (error) {
+        console.error("Error fetching logs:", error);
+      }
+    };
+
+    fetchLogs();
+    const interval = setInterval(fetchLogs, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (logContainerRef.current) {
+      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+    }
+  }, [logs]);
 
   return (
-    <Card className="bg-black text-green-500 h-19/20">
+    <Card className="bg-black text-green-500 h-full w-full">
       <CardHeader>
         <CardTitle className="text-green-500">Terminal Logs</CardTitle>
       </CardHeader>
       <CardContent>
-        <Textarea
-          readOnly
-          value={logs.join("\n")}
-          className="bg-black text-green-500 font-mono resize-none"
-          rows={10}
-        />
+        <div
+          ref={logContainerRef}
+          className="bg-black text-green-500 font-mono h-[400px] overflow-y-auto p-2 border border-green-500 rounded-lg"
+        >
+          {logs.map((log, index) => (
+            <p key={index} className="whitespace-pre-wrap">
+              {log}
+            </p>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
