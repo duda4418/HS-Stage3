@@ -12,28 +12,31 @@ export default function Lights() {
       }
 
       const data = await response.json();
+      console.log("DATA:", data)
       if (Array.isArray(data)) {
         const newLedStates = [false, false, false];
 
-        data.forEach((log) => {
-          if (log.message.includes("LED ONE TURN ON")) {
-            newLedStates[0] = true;
-          } else if (log.message.includes("LED ONE TURNED OFF")) {
-            newLedStates[0] = false;
-          }
-          if (log.message.includes("LED TWO TURN ON")) {
-            newLedStates[1] = true;
-          } else if (log.message.includes("LED TWO TURNED OFF")) {
-            newLedStates[1] = false;
-          }
-          if (log.message.includes("LED THREE TURN ON")) {
-            newLedStates[2] = true;
-          } else if (log.message.includes("LED THREE TURNED OFF")) {
-            newLedStates[2] = false;
-          }
-        });
+        const lastLog = data[data.length - 1]; // Get the last log entry
 
+      if (lastLog) {
+        if (lastLog.message.includes("LED ONE TURN ON")) {
+          newLedStates[0] = true;
+        } else if (lastLog.message.includes("LED ONE TURNED OFF")) {
+          newLedStates[0] = false;
+        }
+        if (lastLog.message.includes("LED TWO TURN ON")) {
+          newLedStates[1] = true;
+        } else if (lastLog.message.includes("LED TWO TURNED OFF")) {
+          newLedStates[1] = false;
+        }
+        if (lastLog.message.includes("LED THREE TURN ON")) {
+          newLedStates[2] = false;
+        } else if (lastLog.message.includes("LED THREE TURNED OFF")) {
+          newLedStates[2] = false;
+        }
+      }
         setLedStates(newLedStates);
+        console.log("Ledstates:", ledStates)
       }
     } catch (error) {
       console.error("Error fetching logs:", error);
@@ -42,12 +45,12 @@ export default function Lights() {
 
   useEffect(() => {
     fetchLogs();
-  }, []);
+  }, [ledStates]);
 
   const ledColors = [
-    { active: "bg-red-500", inactive: "bg-red-900" },
-    { active: "bg-green-500", inactive: "bg-green-900" },
-    { active: "bg-yellow-100", inactive: "bg-yellow-400" },
+    { inactive: "bg-gray-400", active: "bg-yellow-300" },
+    { inactive: "bg-gray-400", active: "bg-green-500" },  
+    { inactive: "bg-gray-400", active: "bg-red-500" },
   ];
 
   return (
@@ -57,7 +60,7 @@ export default function Lights() {
           <div
             key={index}
             className={`w-16 h-16 rounded-full transition-colors duration-300 
-              ${isOn ? ledColors[index].active + " shadow-lg animate-pulse" : ledColors[index].inactive}`}
+              ${isOn ? ledColors[index].active /*+ " shadow-lg animate-pulse"*/ : ledColors[index].inactive}`}
           />
         ))}
       </div>
