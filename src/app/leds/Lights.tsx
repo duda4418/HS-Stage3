@@ -12,7 +12,6 @@ export default function Lights() {
       }
 
       const data = await response.json();
-      console.log("DATA:", data)
       if (Array.isArray(data)) {
         const newLedStates = [false, false, false];
 
@@ -36,7 +35,6 @@ export default function Lights() {
         }
       }
         setLedStates(newLedStates);
-        console.log("Ledstates:", ledStates)
       }
     } catch (error) {
       console.error("Error fetching logs:", error);
@@ -45,7 +43,7 @@ export default function Lights() {
 
   useEffect(() => {
     fetchLogs();
-  }, [ledStates]);
+  }, []);
 
   const ledColors = [
     { inactive: "bg-gray-400", active: "bg-yellow-300" },
@@ -60,7 +58,7 @@ export default function Lights() {
           <div
             key={index}
             className={`w-16 h-16 rounded-full transition-colors duration-300 
-              ${isOn ? ledColors[index].active /*+ " shadow-lg animate-pulse"*/ : ledColors[index].inactive}`}
+              ${isOn ? ledColors[index].active + " shadow-lg animate-pulse" : ledColors[index].inactive}`}
           />
         ))}
       </div>

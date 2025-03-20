@@ -50,6 +50,10 @@ const data = {
           title: "Car ",
           url: "/car",
         },
+        {
+          title: "SPI freq ",
+          url: "/spi",
+        },
       ],
     },
   ],
