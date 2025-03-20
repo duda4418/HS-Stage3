@@ -15,24 +15,25 @@ export default function Lights() {
       if (Array.isArray(data)) {
         const newLedStates = [false, false, false];
 
-        data.forEach((log) => {
-          if (log.message.includes("LED ONE TURN ON")) {
-            newLedStates[0] = true;
-          } else if (log.message.includes("LED ONE TURNED OFF")) {
-            newLedStates[0] = false;
-          }
-          if (log.message.includes("LED TWO TURN ON")) {
-            newLedStates[1] = true;
-          } else if (log.message.includes("LED TWO TURNED OFF")) {
-            newLedStates[1] = false;
-          }
-          if (log.message.includes("LED THREE TURN ON")) {
-            newLedStates[2] = true;
-          } else if (log.message.includes("LED THREE TURNED OFF")) {
-            newLedStates[2] = false;
-          }
-        });
+        const lastLog = data[data.length - 1]; // Get the last log entry
 
+      if (lastLog) {
+        if (lastLog.message.includes("LED ONE TURN ON")) {
+          newLedStates[0] = true;
+        } else if (lastLog.message.includes("LED ONE TURNED OFF")) {
+          newLedStates[0] = false;
+        }
+        if (lastLog.message.includes("LED TWO TURN ON")) {
+          newLedStates[1] = true;
+        } else if (lastLog.message.includes("LED TWO TURNED OFF")) {
+          newLedStates[1] = false;
+        }
+        if (lastLog.message.includes("LED THREE TURN ON")) {
+          newLedStates[2] = false;
+        } else if (lastLog.message.includes("LED THREE TURNED OFF")) {
+          newLedStates[2] = false;
+        }
+      }
         setLedStates(newLedStates);
       }
     } catch (error) {
@@ -45,9 +46,9 @@ export default function Lights() {
   }, []);
 
   const ledColors = [
-    { active: "bg-red-500", inactive: "bg-red-900" },
-    { active: "bg-green-500", inactive: "bg-green-900" },
-    { active: "bg-yellow-100", inactive: "bg-yellow-400" },
+    { inactive: "bg-gray-400", active: "bg-yellow-300" },
+    { inactive: "bg-gray-400", active: "bg-green-500" },  
+    { inactive: "bg-gray-400", active: "bg-red-500" },
   ];
 
   return (

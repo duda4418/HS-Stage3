@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client"
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
@@ -10,8 +11,29 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
+import { useState, useEffect } from "react";
 
 export function CPUCard({ cpu_info }: any) {
+
+
+  const [cpuInfo, setCpuInfo] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchCPUInfo = async () => {
+      try {
+        const response = await fetch("http://192.168.194.156:5000/api/cpu_info");
+        const data = await response.json();
+        setCpuInfo(data);
+        console.log("CPU INFO:",data)
+      } catch (error) {
+        console.error("Error fetching CPU info:", error);
+      }
+    };
+
+    fetchCPUInfo();
+    const interval = setInterval(fetchCPUInfo, 5000); // Refresh every 5s
+    return () => clearInterval(interval);
+  }, []);
   return (
     <Card>
       <CardHeader>
@@ -30,38 +52,38 @@ export function CPUCard({ cpu_info }: any) {
             <TableRow>
               <TableCell>Architecture</TableCell>
               <TableCell>
-                {cpu_info ? cpu_info.architecture : "ARMv7"}
+                {cpuInfo ? cpuInfo.architecture : "unknown"}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>CPU Model</TableCell>
               <TableCell>
-                {cpu_info ? cpu_info.cpu_model : "Broadcom BCM2837"}
+                {cpuInfo ? cpuInfo.cpu_model : "unknown"}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>CPU Frequency</TableCell>
               <TableCell>
-                {cpu_info ? cpu_info.cpu_frequency : "1.2 GHz"}
+                {cpuInfo ? cpuInfo.cpu_frequency : "unknown"}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Physical Cores</TableCell>
-              <TableCell>{cpu_info ? cpu_info.cpu_cores : "4"}</TableCell>
+              <TableCell>{cpuInfo ? cpuInfo.cpu_cores : "unknown"}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Logical Processors</TableCell>
               <TableCell>
-                {cpu_info ? cpu_info.logical_processors : "4"}
+                {cpuInfo ? cpuInfo.logical_processors : "unknown"}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell>CPU Usage</TableCell>
-              <TableCell>{cpu_info ? cpu_info.cpu_usage : "15%"}</TableCell>
+              <TableCell>{cpuInfo ? cpuInfo.cpu_usage : "unknown"}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Temperature</TableCell>
-              <TableCell>{cpu_info ? cpu_info.temperature : "45°C"}</TableCell>
+              <TableCell>{cpuInfo ? cpuInfo.temperature : "unknown"}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
