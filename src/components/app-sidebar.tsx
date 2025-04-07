@@ -51,8 +51,22 @@ const data = {
           url: "/car",
         },
         {
-          title: "SPI freq ",
+          title: "SPI",
           url: "/spi",
+        },
+      ],
+    },
+    {
+      title: "Task 3",
+      url: "#",
+      items: [
+        {
+          title: "Harta ",
+          url: "/map",
+        },
+        {
+          title: "Sensori",
+          url: "/sensor",
         },
       ],
     },

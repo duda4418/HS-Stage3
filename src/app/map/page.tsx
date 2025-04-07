@@ -1,5 +1,4 @@
-"use client";
-import SPICard from "./spiCard";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -15,6 +14,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import Map from "./Map";
+import CarInfo from "./CarInfo";
 
 export default function Page() {
   return (
@@ -27,17 +28,18 @@ export default function Page() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Task 2</BreadcrumbLink>
+                <BreadcrumbLink href="#">Task 3</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>SPI</BreadcrumbPage>
+                <BreadcrumbPage>Harta</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </header>
         <div className="m-10">
-          <SPICard />
+          {/* <Map /> */}
+          <CarInfo />
         </div>
       </SidebarInset>
     </SidebarProvider>

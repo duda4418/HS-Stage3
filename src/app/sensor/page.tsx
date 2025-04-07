@@ -1,5 +1,3 @@
-"use client";
-import SPICard from "./spiCard";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -15,6 +13,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import Sensors from "./Sensors";
 
 export default function Page() {
   return (
@@ -27,17 +26,17 @@ export default function Page() {
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Task 2</BreadcrumbLink>
+                <BreadcrumbLink href="#">Task 3</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
-                <BreadcrumbPage>SPI</BreadcrumbPage>
+                <BreadcrumbPage>Logs</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </header>
         <div className="m-10">
-          <SPICard />
+          <Sensors />
         </div>
       </SidebarInset>
     </SidebarProvider>

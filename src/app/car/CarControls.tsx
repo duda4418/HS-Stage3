@@ -1,18 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
 
 export function CarController() {
-  // Accelerator value ranges from 0 to 100
   const [accelerator, setAccelerator] = useState(0);
-  // Reverse mode toggled on/off
   const [isReverse, setIsReverse] = useState(false);
 
-  // Compute the speed based on reverse mode.
-  // If reverse is enabled, speed is negative.
-  const speed = isReverse ? -accelerator : accelerator;
+  const sendMovementCommand = (direction: string, accelerator: number) => {
+    fetch(
+      `http://192.168.194.156:5000/api/move?direction=${direction}&speed=${accelerator}&frequency=15000`,
+      {
+        method: "GET",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => console.log("Car Movement Response:", data))
+      .catch((error) =>
+        console.error("Error sending movement command:", error)
+      );
+  };
+
+  const stopCar = () => {
+    fetch("http://192.168.194.156:5000/api/stop", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => console.log("Car Stopped:", data))
+      .catch((error) => console.error("Error sending stop command:", error));
+  };
+
+  useEffect(() => {
+    const direction = !isReverse ? "backward" : "forward";
+    sendMovementCommand(direction, accelerator);
+  }, [accelerator, isReverse]);
 
   return (
     <Card className="max-w-md mx-auto my-8">
@@ -20,7 +43,6 @@ export function CarController() {
         <CardTitle>Car Controller</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Accelerator Control */}
         <div>
           <label
             htmlFor="accelerator"
@@ -38,10 +60,9 @@ export function CarController() {
             className="w-full"
           />
           <p className="mt-2 text-sm text-gray-500">
-            {isReverse ? "Reversing" : "Driving Forward"} at {Math.abs(speed)}%
+            {isReverse ? "Reversing" : "Driving Forward"} at {accelerator}%
           </p>
         </div>
-        {/* Reverse Switch */}
         <div className="flex items-center space-x-3">
           <Switch
             checked={isReverse}
@@ -50,6 +71,9 @@ export function CarController() {
           />
           <span>Enable Reverse</span>
         </div>
+        <Button onClick={stopCar} className="w-full bg-red-500 text-white">
+          Stop Car
+        </Button>
       </CardContent>
     </Card>
   );
